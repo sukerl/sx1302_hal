@@ -29,7 +29,6 @@ jobs:
           context: .
           platforms: linux/amd64,linux/arm64
           push: true
-          file: Dockerfile.packet_forwarder
           tags: |
             user/app:latest
             user/app:1.0.0
