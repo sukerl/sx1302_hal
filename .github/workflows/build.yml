@@ -4,9 +4,8 @@ on:
   push:
     branches:
       - 'helium/hotspot'
-env:
-  file: Dockerfile.packet_forwarder
 jobs:
+  #Using this action https://github.com/marketplace/actions/build-and-push-docker-images
   docker:
     runs-on: ubuntu-latest
     steps:
@@ -30,6 +29,7 @@ jobs:
           context: .
           platforms: linux/amd64,linux/arm64
           push: true
+          file: Dockerfile.packet_forwarder
           tags: |
             user/app:latest
             user/app:1.0.0
