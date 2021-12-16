@@ -9,6 +9,10 @@ jobs:
   docker:
     runs-on: ubuntu-latest
     steps:
+      - 
+        uses: actions/checkout@v2
+        with:
+          ref: helium/hotspot
       -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v1
@@ -32,7 +36,7 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
-            user/app:latest
-            user/app:1.0.0
-            ghcr.io/user/app:latest
-            ghcr.io/user/app:1.0.0
+            ${GITHUB_REPOSITORY}:latest
+            ${GITHUB_REPOSITORY}:0.0.1
+            ghcr.io/${GITHUB_REPOSITORY}:latest
+            ghcr.io/${GITHUB_REPOSITORY}:0.0.1
