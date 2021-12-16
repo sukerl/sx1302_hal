@@ -4,7 +4,8 @@ on:
   push:
     branches:
       - 'helium/hotspot'
-
+env:
+  file: Dockerfile.packet_forwarder
 jobs:
   docker:
     runs-on: ubuntu-latest
