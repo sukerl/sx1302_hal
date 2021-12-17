@@ -25,7 +25,7 @@ jobs:
         uses: docker/login-action@v1 
         with:
           registry: ghcr.io
-          username: ${{ github.repository_owner }}
+          username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       -
         name: Build and push
@@ -39,3 +39,5 @@ jobs:
             heliumdiy/sx1302_hal:0.0.1
             ghcr.io/heliumdiy/sx1302_hal:latest
             ghcr.io/heliumdiy/sx1302_hal:0.0.1
+          secrets: |
+            "github_token=${{ secrets.GITHUB_TOKEN }}"
