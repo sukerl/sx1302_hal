@@ -10,9 +10,6 @@ jobs:
       - 
         name: Checkout
         uses: actions/checkout@v2
-      - name: Generate tags
-        id: tags
-        uses: greboid/docker-tags-action@v1
       -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v1
@@ -45,8 +42,13 @@ jobs:
           flavor: |
             latest=true
           tags: |
-            type=sha,prefix=
-            type=sha,format=long,prefix=
+            type=schedule
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
+            type=sha
       -
         name: Build and push
         uses: docker/build-push-action@v2
@@ -55,6 +57,6 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           labels: ${{ steps.meta.outputs.labels }}
-          tags: ${{ steps.meta.outputs.tags }} {{ steps.tags.outputs.tags }}
+          tags: ${{ steps.meta.outputs.tags }}
           secrets: |
             "github_token=${{ secrets.GITHUB_TOKEN }}"
