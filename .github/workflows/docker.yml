@@ -4,12 +4,34 @@ on: [push]
 
 jobs:
   #Using this action https://github.com/marketplace/actions/build-and-push-docker-images
+  lint:
+    runs-on: ubuntu-latest
+    steps: 
+    - name: Checkout
+      uses: actions/checkout@master
+
+    - name: lint
+      uses: luke142367/Docker-Lint-Action@v1.0.0
+      with:
+        target: Dockerfile
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Linter
+      uses: ghe-actions/dockerfile-validator@v1
+      with:
+        dockerfile: 'Dockerfile'
+        lint: 'hadolint'
+
   docker:
     runs-on: ubuntu-latest
     steps:
       - 
         name: Checkout
         uses: actions/checkout@v2
+      - name: Generate tags
+        id: tags
+        uses: greboid/docker-tags-action@v1
       -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v1
@@ -52,23 +74,6 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           labels: ${{ steps.meta.outputs.labels }}
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: ${{ steps.meta.outputs.tags }} {{ steps.tags.outputs.tags }}
           secrets: |
             "github_token=${{ secrets.GITHUB_TOKEN }}"
-      - 
-        name: Publish release to docker.io
-        uses: flownative/action-docker-publish-semver@master
-        with:
-          tag_ref: ${{ github.ref }}
-          tag_latest: 'yes'
-          tag_custom: 'some-custom-tag'
-
-          source_image_name: docker.pkg.github.com/heliumdiy/sx1302_hal
-          source_registry_username: ${{ github.actor }}
-          source_registry_password: ${{ secrets.GITHUB_TOKEN }}
-          source_registry_endpoint: https://ghcr.io/v2/
-
-          target_image_name: heliumdiy/sx1302_hal
-          target_registry_username: ${{ secrets.DOCKERHUB_USERNAME }}
-          target_registry_password: ${{ secrets.DOCKERHUB_TOKEN }}
-          target_registry_endpoint: https://index.docker.io/v1/
