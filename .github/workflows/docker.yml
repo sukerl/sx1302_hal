@@ -55,3 +55,20 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           secrets: |
             "github_token=${{ secrets.GITHUB_TOKEN }}"
+      - 
+        name: Publish release to docker.io
+        uses: flownative/action-docker-publish-semver@master
+        with:
+          tag_ref: ${{ github.ref }}
+          tag_latest: 'yes'
+          tag_custom: 'some-custom-tag'
+
+          source_image_name: ghcr.io/${{ github.repository }}
+          source_registry_username: github
+          source_registry_password: ${{ secrets.GITHUB_TOKEN }}
+          source_registry_endpoint: https://ghcr.io/v2/
+
+          target_image_name:  heliumdiy/${{ github.repository }}
+          target_registry_username: ${{ secrets.DOCKERHUB_USERNAME }}
+          target_registry_password: ${{ secrets.DOCKERHUB_TOKEN }}
+          target_registry_endpoint: https://index.docker.io/v1/
