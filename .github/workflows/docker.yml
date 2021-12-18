@@ -63,7 +63,7 @@ jobs:
           tag_latest: 'yes'
           tag_custom: 'some-custom-tag'
 
-          source_image_name: ghcr.io/heliumdiy//sx1302_hal
+          source_image_name: docker.pkg.github.com/heliumdiy/sx1302_hal
           source_registry_username: ${{ github.actor }}
           source_registry_password: ${{ secrets.GITHUB_TOKEN }}
           source_registry_endpoint: https://ghcr.io/v2/
