@@ -1,9 +1,7 @@
 name: ci
 
-on:
-  push:
-    branches:
-      - 'helium/hotspot'
+on: [push]
+
 jobs:
   #Using this action https://github.com/marketplace/actions/build-and-push-docker-images
   docker:
@@ -33,6 +31,18 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          images: |
+            heliumdiy/sx1302_hal
+            ghcr.io/${{ github.repository }}
+          flavor: |
+            latest=true
+          tags: |
+            type=sha,prefix=
+            type=sha,format=long,prefix=
       -
         name: Build and push
         uses: docker/build-push-action@v2
@@ -40,10 +50,8 @@ jobs:
           context: .
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: |
-            heliumdiy/sx1302_hal:latest
-            heliumdiy/sx1302_hal:0.0.1
-            ghcr.io/heliumdiy/sx1302_hal:latest
-            ghcr.io/heliumdiy/sx1302_hal:0.0.1
+          labels: ${{ steps.meta.outputs.labels }}
+          tags: ${{ steps.meta.outputs.tags }}
+
           secrets: |
             "github_token=${{ secrets.GITHUB_TOKEN }}"
