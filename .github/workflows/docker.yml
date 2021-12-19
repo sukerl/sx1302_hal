@@ -37,10 +37,14 @@ jobs:
         uses: docker/metadata-action@v3
         with:
           images: |
-            heliumdiy/${{ github.repository }}
+            ${{ github.repository }}
             ghcr.io/${{ github.repository }}
           flavor: |
             latest=true
+          labels: |
+            org.opencontainers.image.title=${{ github.repository }}
+            org.opencontainers.image.description="Semtech UDP Packet Forwarder for the Helium Network"
+            org.opencontainers.image.vendor="Helium DIY Org."
           tags: |
             type=schedule
             type=ref,event=branch
@@ -55,8 +59,8 @@ jobs:
         with:
           context: .
           platforms: linux/amd64,linux/arm64
-          push: true
-          labels: ${{ steps.meta.outputs.labels }}
+          push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
           secrets: |
             "github_token=${{ secrets.GITHUB_TOKEN }}"
