@@ -9,6 +9,7 @@ WORKDIR /usr/src/sx1302_hal
 ADD . /usr/src/sx1302_hal/
 
 RUN make clean && make
+RUN sed -i 's/localhost/miner/' /usr/src/sx1302_hal/packet_forwarder/global_conf.*
 
 FROM ${RUNNER_IMAGE} as runner
 
