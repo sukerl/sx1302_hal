@@ -30,6 +30,12 @@ elif [ "${CONCENTRATOR_INTERFACE}" == "spi" ] || [ "${CONCENTRATOR_INTERFACE}" =
 elif [ "${CONCENTRATOR_INTERFACE}" == "usb" ] || [ "${CONCENTRATOR_INTERFACE}" == "USB" ]; then
   CONCENTRATOR_INTERFACE="USB"
 fi
+if [[ -z "${CONFIG_FILE}" ]]; then
+  echo "No Config File supplied, assuming default config file for your location"
+  CONFIG_FILE="/opt/packet_forwarder/configs/global_conf.json"
+else
+  CONFIG_FILE="${CONFIG_FILE}"
+fi
 
 # copy configuration file based on passed environment variables
 if [ ! -f /opt/packet_forwarder/configs/global_conf.json ]; then
@@ -46,4 +52,4 @@ if [ ! -f /opt/packet_forwarder/reset_lgw.sh ]; then
 fi
 
 # run the packet forwarder
-/opt/packet_forwarder/lora_pkt_fwd -c /opt/packet_forwarder/configs/global_conf.json
+/opt/packet_forwarder/lora_pkt_fwd -c $CONFIG_FILE
