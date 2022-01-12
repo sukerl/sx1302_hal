@@ -1,9 +1,9 @@
 name: docker
 
 on:
-  create:
+  push:
     tags:
-      - *
+      - '*'
 
 jobs:
   #Using this action https://github.com/marketplace/actions/build-and-push-docker-images
