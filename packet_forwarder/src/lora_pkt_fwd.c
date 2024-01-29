@@ -2066,12 +2066,12 @@ void thread_up(void)
     *(uint32_t *)(buff_up + 8) = net_mac_l;
 
     while (!exit_sig && !quit_sig)
+    {
 
         /* fetch packets */
         pthread_mutex_lock(&mx_concent);
         nb_pkt = lgw_receive(NB_PKT_MAX, rxpkt);
         pthread_mutex_unlock(&mx_concent);
-
         if (nb_pkt == LGW_HAL_ERROR)
         {
             MSG("ERROR: [up] failed packet fetch, exiting\n");
