@@ -2066,21 +2066,11 @@ void thread_up(void)
     *(uint32_t *)(buff_up + 8) = net_mac_l;
 
     while (!exit_sig && !quit_sig)
-    {
-        struct timeval beforeReceiveTime;
-        gettimeofday(&beforeReceiveTime, NULL);
-        int milliBeforeReceiveTime = beforeReceiveTime.tv_usec / 1000;
-        MSG("MYINFO: before lgw_receive: %d \n", milliBeforeReceiveTime);
 
         /* fetch packets */
         pthread_mutex_lock(&mx_concent);
         nb_pkt = lgw_receive(NB_PKT_MAX, rxpkt);
         pthread_mutex_unlock(&mx_concent);
-
-        struct timeval afterReceiveTime;
-        gettimeofday(&afterReceiveTime, NULL);
-        int milliAfterReceiveTime = afterReceiveTime.tv_usec / 1000;
-        MSG("MYINFO: after lgw_receive: %d \n", milliAfterReceiveTime);
 
         if (nb_pkt == LGW_HAL_ERROR)
         {
