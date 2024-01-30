@@ -1823,7 +1823,7 @@ int sx1302_parse(lgw_context_t * context, struct lgw_pkt_rx_s * p) {
 
     /* Packet timestamp corrected */
     //p->count_us = p->count_us - timestamp_correction;
-    p->count_us = p->count_us - timestamp_correction * 10;
+    p->count_us = p->count_us - timestamp_correction;
     p->count_32 = p->count_us * 32 + pkt.timestamp_cnt % 32;
 
     /* Packet CRC status */
